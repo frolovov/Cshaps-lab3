@@ -25,14 +25,14 @@ public class Student {
 		this.marks = marks;
 	}
 	
-	public boolean isHaveMarkTwo() {
-		boolean flag = false;
+	public int numberOfMarksTwo() {
+		int count = 0;
 		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
 			if (mark.getValue() == 2) {
-				flag = true;
+				count++;
 			}
 		}
-		return flag;
+		return count;
 	}
 	
 	@Override

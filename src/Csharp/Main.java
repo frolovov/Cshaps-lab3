@@ -1,5 +1,7 @@
 package Csharp;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +26,9 @@ public class Main {
 		List<Institute> listOfInstitutes = new ArrayList<Institute>();
 		
 		// students of institute Of Exact Sciences
-		Student frolov = createStudent("Фролов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
-		Student petrov = createStudent("Петров", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
-		Student ivanov = createStudent("Иванов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
+		Student frolov = createStudent("Фролов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 2});
+		Student petrov = createStudent("Петров", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 2, 2});
+		Student ivanov = createStudent("Иванов", new Lesson[] {math, programming, physics, chemistry}, new int[] {2, 5, 2, 2});
 		Student lebedev = createStudent("Лебедев", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
 		Student antonov = createStudent("Антонов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
 		Student borisov = createStudent("Борисов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
@@ -87,7 +89,7 @@ public class Main {
 		Student yakovlev = createStudent("Яковлев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student gusev = createStudent("Гусев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student melnikov = createStudent("Мельников", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
-		Student gromov = createStudent("Громов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
+		Student gromov = createStudent("Громов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {2, 5, 2, 2});
 		Student grachev = createStudent("Грачев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student mironov = createStudent("Миронов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student smirnov = createStudent("Смирнов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
@@ -132,6 +134,305 @@ public class Main {
 		listOfInstitutes.add(instituteOfHumanitarianSciences);
 		
 		// overview
+		System.out.println("Данные на вход:");
+		printDatabase(listOfInstitutes);
+		
+		// console for user
+		Scanner in = new Scanner(System.in);
+		System.out.println("Выберите запрос который нужно выполнить:\n"
+				+ "1) фамилии студентов, у которых две и более двоек за сессию, и удалить их (выведя сообщение)\n"
+				+ "2) институт, на котором на первом курсе наибольшее количество отличников\n"
+				+ "3) курс, на котором исключено большее количество студентов\n"
+				+ "4) институт с наибольшим количеством отличников\n"
+				+ "5) полный список отличников с указанием института, группы и курса, где они учатся\n"
+				+ "6) группу, где нет двоечников\n"
+				+ "7) институт и курс, на котором средний бал не меньше 3,5\n"
+				+ "8) фамилии студентов, у которых нет троек и двоек\n"
+				+ "9) институт и группу, где наибольшее количество отличников\n"
+				+ "10) фамилии студентов-отличников на третьем курсе\n"
+				+ "11) предметы и перечень кафедр, на которых они присутствуют\n"
+				+ "12) фамилии студентов, группу и институт, где средний балл составляет 4,5\n"
+				+ "13) студентов первого курса, у которых три двойки и удалите их\n"
+				+ "14) группы, в которых нет двоечников\n"
+				+ "15) фамилии студентов-отличников на первом и втором курсах по всем институтам, средний балл по каждой группе и упорядочьте группы по нему\n"
+				+ "16) институты, на которых нет двоечников\n"
+				+ "17) фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3\n"
+				+ "18) институт, на котором на первом курсе наибольшее количество групп, где нет двоек\n"
+				+ "19) курс с наибольшим количеством отличников\n"
+				+ "20) институт, на котором на первом курсе наибольшее количество двоечников\n"
+				+ "21) группы, в которых нет отличников\n"
+				+ "22) полный список двоечников с указанием института, группы и курса, где они учатся\n"
+				+ "23) фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся");
+		
+		String result = "";
+		switch(in.nextInt()) {
+			case 1:
+				// task 1
+				
+				for (Institute institute: listOfInstitutes) {
+					for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+						// create 2 lists for late removing elements because we can't remove elements
+						// from Map when iterate it
+						List<Integer> groupsToRefactor = new ArrayList<Integer>();
+						List<Student> studentsToRemove = new ArrayList<Student>();
+						for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+							List<Student> students = entry2.getValue();
+							for (Student student: students) {
+								if (student.numberOfMarksTwo() >= 2) {
+									result += student.getSurname() + "\n";
+									// add what we need to remove
+									groupsToRefactor.add(entry2.getKey());
+									studentsToRemove.add(student);
+									System.out.println("Удалён студент " + student.toString());
+								}
+							}
+						}
+						// removing students from Map
+						for (int i = 0; i < groupsToRefactor.size(); i++) {
+							institute.getStudentsInGroup().get(groupsToRefactor.get(i)).remove(studentsToRemove.get(i));
+						}
+					}
+				}
+				
+				System.out.println("Task 1: фамилии студентов, у которых две и более двоек за сессию, и удалить их (выведя сообщение)\n");
+				printDatabase(listOfInstitutes);
+				writeIntoFile(result);
+				break;
+			
+			case 2:
+				// task 2
+				
+				System.out.println("Task 2: институт, на котором на первом курсе наибольшее количество отличников\n");
+
+				writeIntoFile(result);
+				break;
+			
+			case 3:
+				// task 3
+						
+				System.out.println("Task 3: курс, на котором исключено большее количество студентов\n");
+
+				writeIntoFile(result);
+				break;
+			
+			case 4:
+				// task 4
+						
+				System.out.println("Task 4: институт с наибольшим количеством отличников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 5:	
+				// task 5
+				
+				System.out.println("Task 5: полный список отличников с указанием института, группы и курса, где они учатся\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 6:
+				// task 6
+				
+				System.out.println("Task 6: группу, где нет двоечников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 7:
+				// task 7
+				
+				System.out.println("Task 7: институт и курс, на котором средний бал не меньше 3,5\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 8:	
+				// task 8
+				
+				System.out.println("Task 8: фамилии студентов, у которых нет троек и двоек\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 9:	
+				// task 9
+				
+				System.out.println("Task 9: институт и группу, где наибольшее количество отличников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 10:	
+				// task 10
+				
+				System.out.println("Task 10: фамилии студентов-отличников на третьем курсе\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 11:	
+				// task 11
+				
+				System.out.println("Task 11: предметы и перечень кафедр, на которых они присутствуют\n");
+
+				writeIntoFile(result);
+				break;
+			
+			case 12:	
+				// task 12
+				
+				System.out.println("Task 12: фамилии студентов, группу и институт, где средний балл составляет 4,5\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 13:
+				// task 13
+				
+				System.out.println("Task 13: студентов первого курса, у которых три двойки и удалите их\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 14:	
+				// task 14
+				
+				System.out.println("Task 14: группы, в которых нет двоечников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 15:
+				// task 15
+				
+				System.out.println("Task 15: фамилии студентов-отличников на первом и втором курсах по всем институтам, средний балл по каждой группе и упорядочьте группы по нему\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 16:
+				// task 16
+				
+				System.out.println("Task 16: институты, на которых нет двоечников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 17:
+				// task 17
+				
+				System.out.println("Task 17: фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 18:
+				// task 18
+				Map<Institute, Integer> numberOfGroupsWhichHasNotMarkTwo = new HashMap<Institute, Integer>();
+				for (Institute institute: listOfInstitutes) {
+					int count = 0;
+					for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+						if (entry.getKey() == 1) {
+							Integer[] groups = entry.getValue();
+							for (Integer group: groups) {
+								for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+									if (group == entry2.getKey()) {
+										List<Student> students = entry2.getValue();
+										boolean flag = true;
+										for (Student student: students) {
+											if(student.numberOfMarksTwo() > 0) {
+												flag = false;
+											}
+										}
+										if (flag) {
+											count++;
+										}
+									}
+								}
+							}
+						}
+					}
+					numberOfGroupsWhichHasNotMarkTwo.put(institute, count);
+				}
+				System.out.println(numberOfGroupsWhichHasNotMarkTwo.toString());
+				int max = 0;
+				
+				// set in result random institute for set in max random value for comparison
+				for (Map.Entry<Institute, Integer> entry: numberOfGroupsWhichHasNotMarkTwo.entrySet()) {
+					max = entry.getValue();
+					result = entry.getKey().toString();
+				}
+				for (Map.Entry<Institute, Integer> entry: numberOfGroupsWhichHasNotMarkTwo.entrySet()) {
+					if (max < entry.getValue()) {
+						result = entry.getKey().toString();
+					}
+				}
+				
+				writeIntoFile(result);
+				break;
+				
+			case 19:
+				// task 19
+				
+				System.out.println("Task 19: курс с наибольшим количеством отличников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 20:
+				// task 20
+				
+				System.out.println("Task 20: институт, на котором на первом курсе наибольшее количество двоечников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 21:		
+				// task 21
+						
+				System.out.println("Task 21: группы, в которых нет отличников\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 22:
+				// task 22
+				
+				System.out.println("Task 22: полный список двоечников с указанием института, группы и курса, где они учатся\n");
+
+				writeIntoFile(result);
+				break;
+				
+			case 23:	
+				// task 23
+				
+				System.out.println("Task 23: фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся\n");
+
+				writeIntoFile(result);
+				break;
+		}
+	}
+	
+	public static Student createStudent(String name, Lesson[] lessons, int[] marks) {
+		Map<Lesson, Integer> studentMarks = new HashMap<Lesson, Integer>();
+		for (int i = 0; i < lessons.length; i++) {
+			studentMarks.put(lessons[i], marks[i]);
+		}
+		return new Student(name, studentMarks);
+	}
+	
+	public static void writeIntoFile(String result) {
+		try(FileWriter writer = new FileWriter("C:/temp/forQueries.txt", false)) {
+            writer.write(result);
+        }
+        catch(IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+	}
+	
+	public static void printDatabase(List<Institute> listOfInstitutes) {
+		System.out.println();
 		for (Institute institute: listOfInstitutes) {
 			for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
 				for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
@@ -144,205 +445,5 @@ public class Main {
 				System.out.println();
 			}
 		}
-		
-		// console for user
-		Scanner in = new Scanner(System.in);
-		System.out.println("Выберите запрос который нужно выполнить:\n"
-				+ "1) фамилии студентов, у которых две и более двоек за сессию, и удалить их (выведя сообщение)"
-				+ "2) институт, на котором на первом курсе наибольшее количество отличников"
-				+ "3) курс, на котором исключено большее количество студентов"
-				+ "4) институт с наибольшим количеством отличников"
-				+ "5) полный список отличников с указанием института, группы и курса, где они учатся"
-				+ "6) группу, где нет двоечников"
-				+ "7) институт и курс, на котором средний бал не меньше 3,5"
-				+ "8) фамилии студентов, у которых нет троек и двоек"
-				+ "9) институт и группу, где наибольшее количество отличников"
-				+ "10) фамилии студентов-отличников на третьем курсе"
-				+ "11) предметы и перечень кафедр, на которых они присутствуют"
-				+ "12) фамилии студентов, группу и институт, где средний балл составляет 4,5"
-				+ "13) студентов первого курса, у которых три двойки и удалите их"
-				+ "14) группы, в которых нет двоечников"
-				+ "15) фамилии студентов-отличников на первом и втором курсах по всем институтам, средний балл по каждой группе и упорядочьте группы по нему"
-				+ "16) институты, на которых нет двоечников"
-				+ "17) фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3"
-				+ "18) институт, на котором на первом курсе наибольшее количество групп, где нет двоек"
-				+ "19) курс с наибольшим количеством отличников"
-				+ "20) институт, на котором на первом курсе наибольшее количество двоечников"
-				+ "21) группы, в которых нет отличников"
-				+ "22) полный список двоечников с указанием института, группы и курса, где они учатся"
-				+ "23) фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся");
-		
-		switch(in.nextInt()) {
-			case 1:
-				// task 1
-				
-				System.out.println("Task 1: фамилии студентов, у которых две и более двоек за сессию, и удалить их (выведя сообщение)\n");
-				break;
-			
-			case 2:
-				// task 2
-				
-				System.out.println("Task 2: институт, на котором на первом курсе наибольшее количество отличников\n");
-				break;		
-			
-			case 3:
-				// task 3
-						
-				System.out.println("Task 3: курс, на котором исключено большее количество студентов\n");
-				break;
-			
-			case 4:
-				// task 4
-						
-				System.out.println("Task 4: институт с наибольшим количеством отличников\n");
-				break;
-				
-			case 5:	
-				// task 5
-				
-				System.out.println("Task 5: полный список отличников с указанием института, группы и курса, где они учатся\n");
-				break;
-				
-			case 6:
-				// task 6
-				
-				System.out.println("Task 6: группу, где нет двоечников\n");
-				break;
-				
-			case 7:
-				// task 7
-				
-				System.out.println("Task 7: институт и курс, на котором средний бал не меньше 3,5\n");
-				break;
-				
-			case 8:	
-				// task 8
-				
-				System.out.println("Task 8: фамилии студентов, у которых нет троек и двоек\n");
-				break;
-				
-			case 9:	
-				// task 9
-				
-				System.out.println("Task 9: институт и группу, где наибольшее количество отличников\n");
-				break;
-				
-			case 10:	
-				// task 10
-				
-				System.out.println("Task 10: фамилии студентов-отличников на третьем курсе\n");
-				break;
-				
-			case 11:	
-				// task 11
-				
-				System.out.println("Task 11: предметы и перечень кафедр, на которых они присутствуют\n");
-				break;
-			
-			case 12:	
-				// task 12
-				
-				System.out.println("Task 12: фамилии студентов, группу и институт, где средний балл составляет 4,5\n");
-				break;
-				
-			case 13:
-				// task 13
-				
-				System.out.println("Task 13: студентов первого курса, у которых три двойки и удалите их\n");
-				break;
-				
-			case 14:	
-				// task 14
-				
-				System.out.println("Task 14: группы, в которых нет двоечников\n");
-				break;
-				
-			case 15:
-				// task 15
-				
-				System.out.println("Task 15: фамилии студентов-отличников на первом и втором курсах по всем институтам, средний балл по каждой группе и упорядочьте группы по нему\n");
-				break;
-				
-			case 16:
-				// task 16
-				
-				System.out.println("Task 16: институты, на которых нет двоечников\n");
-				break;
-				
-			case 17:
-				// task 17
-				
-				System.out.println("Task 17: фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3\n");
-				break;
-				
-			case 18:
-				// task 18
-				Map<Institute, Integer> AmountOfGroupsWhichHasNotMarkTwo = new HashMap<Institute, Integer>();
-				for (Institute institute: listOfInstitutes) {
-					int count = 0;
-					for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-						if (entry.getKey() == 1) {
-							Integer[] groups = entry.getValue();
-							for (Integer group: groups) {
-								for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
-									if (group == entry2.getKey()) {
-										List<Student> students = entry2.getValue();
-										boolean flag = true;
-										for (Student student: students) {
-											if(student.isHaveMarkTwo()) {
-												flag = false;
-											}
-										}
-										if (flag) {
-											count++;
-										}
-									}
-								}
-							}
-						}
-					}
-					AmountOfGroupsWhichHasNotMarkTwo.put(institute, count);
-				}
-				System.out.println("Task 18: институт, на котором на первом курсе наибольшее количество групп, где нет двоек\n" + AmountOfGroupsWhichHasNotMarkTwo.toString());
-				break;
-				
-			case 19:
-				// task 19
-				
-				System.out.println("Task 19: курс с наибольшим количеством отличников\n");
-				break;
-				
-			case 20:
-				// task 20
-				
-				System.out.println("Task 20: институт, на котором на первом курсе наибольшее количество двоечников\n");
-				break;
-				
-			case 21:		
-				// task 21
-						
-				System.out.println("Task 21: группы, в которых нет отличников\n");
-				break;
-				
-			case 22:
-				// task 22
-				
-				System.out.println("Task 22: полный список двоечников с указанием института, группы и курса, где они учатся\n");
-				break;
-				
-			case 23:	
-				// task 23
-				
-				System.out.println("Task 23: фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся\n");
-				break;
-		}
-	}
-	
-	public static Student createStudent(String name, Lesson[] lessons, int[] marks) {
-		Map<Lesson, Integer> studentMarks = new HashMap<Lesson, Integer>();
-		for (int i = 0; i < lessons.length; i++) {
-			studentMarks.put(lessons[i], marks[i]);
-		}
-		return new Student(name, studentMarks);
 	}
 }
