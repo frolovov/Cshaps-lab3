@@ -26,9 +26,9 @@ public class Main {
 		List<Institute> listOfInstitutes = new ArrayList<Institute>();
 		
 		// students of institute Of Exact Sciences
-		Student frolov = createStudent("Фролов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 2});
-		Student petrov = createStudent("Петров", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 2, 2});
-		Student ivanov = createStudent("Иванов", new Lesson[] {math, programming, physics, chemistry}, new int[] {2, 5, 2, 2});
+		Student frolov = createStudent("Фролов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
+		Student petrov = createStudent("Петров", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
+		Student ivanov = createStudent("Иванов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
 		Student lebedev = createStudent("Лебедев", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
 		Student antonov = createStudent("Антонов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
 		Student borisov = createStudent("Борисов", new Lesson[] {math, programming, physics, chemistry}, new int[] {5, 5, 5, 5});
@@ -89,7 +89,7 @@ public class Main {
 		Student yakovlev = createStudent("Яковлев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student gusev = createStudent("Гусев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student melnikov = createStudent("Мельников", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
-		Student gromov = createStudent("Громов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {2, 5, 2, 2});
+		Student gromov = createStudent("Громов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {2, 5, 5, 5});
 		Student grachev = createStudent("Грачев", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student mironov = createStudent("Миронов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
 		Student smirnov = createStudent("Смирнов", new Lesson[] {philosophy, sociology, russianLanguage, russianLiterature}, new int[] {5, 5, 5, 5});
@@ -165,6 +165,7 @@ public class Main {
 				+ "23) фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся");
 		
 		String result = "";
+		int max = 0;
 		switch(in.nextInt()) {
 			case 1:
 				// task 1
@@ -201,8 +202,41 @@ public class Main {
 			
 			case 2:
 				// task 2
+				Map<Institute, Integer> resultMap = new HashMap<Institute, Integer>();
+				for (Institute institute: listOfInstitutes) {
+					int count = 0;
+					for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+						if (entry.getKey() == 1) {
+							for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+								List<Student> students = entry2.getValue();
+								for (Student student: students) {
+									if (entry.getKey() == entry2.getKey() / 100) {
+										if (student.numberOfMarksZero() == 0
+												&& student.numberOfMarksTwo() == 0
+												&& student.numberOfMarkThree() == 0
+												&& student.numberOfMarkFour() == 0) {
+											count++;
+										}
+									}
+								}
+							}
+						}
+					}
+					resultMap.put(institute, count);
+				}
+				max = 0;
+				for (Map.Entry<Institute, Integer> entry: resultMap.entrySet()) {
+					result = entry.getKey().toString();
+					max = entry.getValue();
+				}
+				for (Map.Entry<Institute, Integer> entry: resultMap.entrySet()) {
+					if (max < entry.getValue()) {
+						result = entry.getKey().toString();
+						max = entry.getValue();
+					}
+				}
 				
-				System.out.println("Task 2: институт, на котором на первом курсе наибольшее количество отличников\n");
+				System.out.println(resultMap.toString());
 
 				writeIntoFile(result);
 				break;
@@ -356,7 +390,7 @@ public class Main {
 					numberOfGroupsWhichHasNotMarkTwo.put(institute, count);
 				}
 				System.out.println(numberOfGroupsWhichHasNotMarkTwo.toString());
-				int max = 0;
+				max = 0;
 				
 				// set in result random institute for set in max random value for comparison
 				for (Map.Entry<Institute, Integer> entry: numberOfGroupsWhichHasNotMarkTwo.entrySet()) {
@@ -365,6 +399,7 @@ public class Main {
 				}
 				for (Map.Entry<Institute, Integer> entry: numberOfGroupsWhichHasNotMarkTwo.entrySet()) {
 					if (max < entry.getValue()) {
+						max = entry.getValue();
 						result = entry.getKey().toString();
 					}
 				}
@@ -438,8 +473,9 @@ public class Main {
 				for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
 					List<Student> students = entry2.getValue();
 					for (Student student: students) {
-						if (entry.getKey() == entry2.getKey() / 100)
-						System.out.println(institute + ", course: " + entry.getKey() + ", group: " + entry2.getKey() + ", student: " + student);
+						if (entry.getKey() == entry2.getKey() / 100) {
+							System.out.println(institute + ", course: " + entry.getKey() + ", group: " + entry2.getKey() + ", student: " + student);
+						}
 					}
 				}
 				System.out.println();

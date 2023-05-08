@@ -25,10 +25,40 @@ public class Student {
 		this.marks = marks;
 	}
 	
+	public int numberOfMarksZero() {
+		int count = 0;
+		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
+			if (mark.getValue() == 0) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
 	public int numberOfMarksTwo() {
 		int count = 0;
 		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
 			if (mark.getValue() == 2) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int numberOfMarkThree() {
+		int count = 0;
+		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
+			if (mark.getValue() == 3) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public int numberOfMarkFour() {
+		int count = 0;
+		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
+			if (mark.getValue() == 4) {
 				count++;
 			}
 		}
