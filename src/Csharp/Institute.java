@@ -6,14 +6,17 @@ import java.util.Map;
 
 public class Institute {
 	private String name;
-	private int numberOfDeductions;
 	private Map<Integer, Integer[]> groupsOnCourse = new HashMap<Integer, Integer[]>();
 	private Map<Integer, List<Student>> studentsInGroup = new HashMap<Integer, List<Student>>();
+	private Map<Integer, Integer> numberOfDeductionsOnCourse = new HashMap<Integer, Integer>();
 	
 	public Institute(String name, Map<Integer, Integer[]> groupsOnCourse, Map<Integer, List<Student>> studentsInGroup) {
 		this.name = name;
 		this.groupsOnCourse = groupsOnCourse;
 		this.studentsInGroup = studentsInGroup;
+		for (Map.Entry<Integer, Integer[]> entry: groupsOnCourse.entrySet()) {
+			numberOfDeductionsOnCourse.put(entry.getKey(), 0);
+		}
 	}
 	
 	public String getName() {
@@ -22,12 +25,12 @@ public class Institute {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getNumberOfDeductions() {
-		return numberOfDeductions;
+	public Map<Integer, Integer> getNumberOfDeductionsOnCourse() {
+		return numberOfDeductionsOnCourse;
 	}
 
-	public void setNumberOfDeductions(int numberOfDeductions) {
-		this.numberOfDeductions = numberOfDeductions;
+	public void setNumberOfDeductionsOnCourse(Map<Integer, Integer> numberOfDeductionsOnCourse) {
+		this.numberOfDeductionsOnCourse = numberOfDeductionsOnCourse;
 	}
 
 	public Map<Integer, Integer[]> getGroupsOnCourse() {

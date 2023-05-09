@@ -29,11 +29,11 @@ public class Main {
 		Student frolov = createStudent("Фролов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student petrov = createStudent("Петров", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 5, 2 });
 		Student ivanov = createStudent("Иванов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student lebedev = createStudent("Лебедев", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 5, 2 });
 		Student antonov = createStudent("Антонов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student borisov = createStudent("Борисов", new Lesson[] { math, programming, physics, chemistry },
@@ -51,13 +51,13 @@ public class Main {
 		Student fedorov = createStudent("Федоров", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student kozov = createStudent("Козов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 2, 5 });
 		Student krylov = createStudent("Крылов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 2, 5 });
 		Student savelyev = createStudent("Савельев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student yudin = createStudent("Юдин", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 2, 5 });
 
 		// Map of courses and groups for institute Of Exact Sciences
 		Map<Integer, Integer[]> coursesForIOEC = new HashMap<Integer, Integer[]>();
@@ -93,7 +93,7 @@ public class Main {
 
 		// students of institute Of Humanitarian Sciences
 		Student orlov = createStudent("Орлов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
 		Student ulianov = createStudent("Ульянов",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student kulakov = createStudent("Кулаков",
@@ -117,13 +117,13 @@ public class Main {
 		Student melnikov = createStudent("Мельников",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student gromov = createStudent("Громов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 2, 2, 5 });
 		Student grachev = createStudent("Грачев",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
 		Student mironov = createStudent("Миронов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
 		Student smirnov = createStudent("Смирнов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
 
 		// Map of courses and groups for institute Of Humanitarian Sciences
 		Map<Integer, Integer[]> coursesForIOHC = new HashMap<Integer, Integer[]>();
@@ -253,6 +253,7 @@ public class Main {
 								groupsToRefactor.add(entry2.getKey());
 								studentsToRemove.add(student);
 								System.out.println("Удалён студент " + student.toString());
+								institute.getNumberOfDeductionsOnCourse().put(entry.getKey(), institute.getNumberOfDeductionsOnCourse().get(entry.getKey()) + 1);
 							}
 						}
 					}
@@ -310,7 +311,15 @@ public class Main {
 
 		case 3:
 			// task 3
-
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer> entry: institute.getNumberOfDeductionsOnCourse().entrySet()) {
+					System.out.println(entry.toString());
+					if (max < entry.getValue()) {
+						max = entry.getValue();
+						result = institute.toString() + entry.getKey();
+					}
+				}
+			}
 			System.out.println("Task 3: курс, на котором исключено большее количество студентов\n");
 			
 			writeIntoFile(result);
