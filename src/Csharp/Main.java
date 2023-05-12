@@ -246,6 +246,7 @@ public class Main {
 					List<Student> studentsToRemove = new ArrayList<Student>();
 					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
 						List<Student> students = entry2.getValue();
+						if (entry2.getKey() / 100 == entry.getKey()) {
 						for (Student student : students) {
 							if (student.numberOfMarksTwo() >= 2) {
 								result += student.getSurname() + "\n";
@@ -253,8 +254,9 @@ public class Main {
 								groupsToRefactor.add(entry2.getKey());
 								studentsToRemove.add(student);
 								System.out.println("Удалён студент " + student.toString());
-								institute.getNumberOfDeductionsOnCourse().put(entry.getKey(), institute.getNumberOfDeductionsOnCourse().get(entry.getKey()) + 1);
+								institute.getNumberOfDeductionsOnCourse().put(institute.getName() + entry.getKey(), institute.getNumberOfDeductionsOnCourse().get(institute.getName() + entry.getKey()) + 1);
 							}
+						}
 						}
 					}
 					// removing students from Map
@@ -312,15 +314,14 @@ public class Main {
 		case 3:
 			// task 3
 			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer> entry: institute.getNumberOfDeductionsOnCourse().entrySet()) {
+				for (Map.Entry<String, Integer> entry: institute.getNumberOfDeductionsOnCourse().entrySet()) {
 					System.out.println(entry.toString());
 					if (max < entry.getValue()) {
 						max = entry.getValue();
-						result = institute.toString() + entry.getKey();
+						result = entry.getKey();
 					}
 				}
 			}
-			System.out.println("Task 3: курс, на котором исключено большее количество студентов\n");
 			
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);

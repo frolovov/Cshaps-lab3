@@ -8,14 +8,14 @@ public class Institute {
 	private String name;
 	private Map<Integer, Integer[]> groupsOnCourse = new HashMap<Integer, Integer[]>();
 	private Map<Integer, List<Student>> studentsInGroup = new HashMap<Integer, List<Student>>();
-	private Map<Integer, Integer> numberOfDeductionsOnCourse = new HashMap<Integer, Integer>();
+	private Map<String, Integer> numberOfDeductionsOnCourse = new HashMap<String, Integer>();
 	
 	public Institute(String name, Map<Integer, Integer[]> groupsOnCourse, Map<Integer, List<Student>> studentsInGroup) {
 		this.name = name;
 		this.groupsOnCourse = groupsOnCourse;
 		this.studentsInGroup = studentsInGroup;
 		for (Map.Entry<Integer, Integer[]> entry: groupsOnCourse.entrySet()) {
-			numberOfDeductionsOnCourse.put(entry.getKey(), 0);
+			numberOfDeductionsOnCourse.put(name + entry.getKey(), 0);
 		}
 	}
 	
@@ -25,11 +25,11 @@ public class Institute {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Map<Integer, Integer> getNumberOfDeductionsOnCourse() {
+	public Map<String, Integer> getNumberOfDeductionsOnCourse() {
 		return numberOfDeductionsOnCourse;
 	}
 
-	public void setNumberOfDeductionsOnCourse(Map<Integer, Integer> numberOfDeductionsOnCourse) {
+	public void setNumberOfDeductionsOnCourse(Map<String, Integer> numberOfDeductionsOnCourse) {
 		this.numberOfDeductionsOnCourse = numberOfDeductionsOnCourse;
 	}
 
