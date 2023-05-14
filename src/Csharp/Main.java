@@ -468,6 +468,30 @@ public class Main {
 			// task 9: type the most number of
 
 			System.out.println("Task 9: институт и группу, где наибольшее количество отличников\n");
+			
+			Map<Integer, Integer> countExcellentStudentsInGroups = new HashMap<Integer, Integer>();
+			int count = 0;
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						for (Student student: entry2.getValue()) {
+							if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0 
+									&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
+								count++;
+							}
+						}
+						countExcellentStudentsInGroups.put(entry2.getKey(), count);
+						count = 0;
+					}
+				}
+			}
+			max = 0;
+			for (Map.Entry<Integer, Integer> entry : countExcellentStudentsInGroups.entrySet()) {
+				if (max < entry.getValue()) {
+					result = entry.getKey().toString();
+					max = entry.getValue();
+				}
+			}
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
@@ -666,6 +690,32 @@ public class Main {
 			// task 19: type the most number of
 
 			System.out.println("Task 19: курс с наибольшим количеством отличников\n");
+			
+			Map<String, Integer> countExcellentStudentsInCourse = new HashMap<String, Integer>();
+			count = 0;
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						for (Student student: entry2.getValue()) {
+							if (entry2.getKey() / 100 == entry.getKey()) {
+								if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0 
+										&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
+									count++;
+								}
+							}
+						}
+					}
+					countExcellentStudentsInCourse.put(institute.getName() + entry.getKey(), count);
+					count = 0;
+				}
+			}
+			max = 0;
+			for (Map.Entry<String, Integer> entry : countExcellentStudentsInCourse.entrySet()) {
+				if (max < entry.getValue()) {
+					result = entry.getKey().toString();
+					max = entry.getValue();
+				}
+			}
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
@@ -676,6 +726,33 @@ public class Main {
 
 			System.out.println("Task 20: институт, на котором на первом курсе наибольшее количество двоечников\n");
 
+			Map<Institute, Integer> resultMap3 = new HashMap<Institute, Integer>();
+			for (Institute institute : listOfInstitutes) {
+				count = 0;
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					if (entry.getKey() == 1) {
+						for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+							List<Student> students = entry2.getValue();
+							for (Student student : students) {
+								if (entry.getKey() == entry2.getKey() / 100) {
+									if (student.numberOfMarksTwo() > 0) {
+										count++;
+									}
+								}
+							}
+						}
+					}
+				}
+				resultMap.put(institute, count);
+			}
+			max = 0;
+			for (Map.Entry<Institute, Integer> entry : resultMap3.entrySet()) {
+				if (max < entry.getValue()) {
+					result = entry.getKey().toString();
+					max = entry.getValue();
+				}
+			}
+			
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
 			break;
