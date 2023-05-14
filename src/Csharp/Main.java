@@ -433,6 +433,24 @@ public class Main {
 			// task 7: type average mark
 
 			System.out.println("Task 7: институт и курс, на котором средний бал не меньше 3,5\n");
+			
+			Map<String, Float> averageInCourses = new HashMap<String, Float>();
+			float summ = 0;
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						for (Student student: entry2.getValue()) {
+							summ += student.getAverageMark();
+						}
+					}
+					averageInCourses.put(institute.getName() + entry.getKey(), summ / institute.getStudentsInGroup().size());
+				}
+			}
+			for (Map.Entry<String, Float> entry: averageInCourses.entrySet()) {
+				if (entry.getValue() >= 3.5) {
+					result += entry.getKey() + "\n";
+				}
+			}
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
@@ -521,6 +539,21 @@ public class Main {
 			// task 12: type average mark
 
 			System.out.println("Task 12: фамилии студентов, группу и институт, где средний балл составляет 4,5\n");
+			
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						for (Student student: entry2.getValue()) {
+							if (entry2.getKey() / 100 == entry.getKey()) {
+								if (student.getAverageMark() == 4.5) {
+									result += student.getSurname() + " " + institute.getName() + " "
+											+ entry2.getKey() + " " + entry.getKey() + "\n";
+								}
+							}
+						}
+					}
+				}
+			}
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);

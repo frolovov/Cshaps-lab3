@@ -75,6 +75,14 @@ public class Student {
 		return count;
 	}
 	
+	public float getAverageMark() {
+		float result = 0;
+		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
+			result += mark.getValue();
+		}
+		return result / marks.size();
+	}
+	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
