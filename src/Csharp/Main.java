@@ -24,6 +24,7 @@ public class Main {
 	public static void main(String[] args) {
 		// institutes in amount
 		List<Institute> listOfInstitutes = new ArrayList<Institute>();
+		List<Lesson> listOfLessons = new ArrayList<Lesson>();
 
 		// students of institute Of Exact Sciences
 		Student frolov = createStudent("Фролов", new Lesson[] { math, programming, physics, chemistry },
@@ -58,11 +59,20 @@ public class Main {
 				new int[] { 5, 5, 5, 5 });
 		Student yudin = createStudent("Юдин", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 2, 2, 5 });
+		Student kozova = createStudent("Козова", new Lesson[] { math, programming, physics, chemistry },
+				new int[] { 5, 2, 2, 5 });
+		Student krylova = createStudent("Крылова", new Lesson[] { math, programming, physics, chemistry },
+				new int[] { 5, 2, 2, 5 });
+		Student savelyeva = createStudent("Савельева", new Lesson[] { math, programming, physics, chemistry },
+				new int[] { 5, 5, 5, 5 });
+		Student yudina = createStudent("Юдина", new Lesson[] { math, programming, physics, chemistry },
+				new int[] { 5, 2, 2, 5 });
 
 		// Map of courses and groups for institute Of Exact Sciences
 		Map<Integer, Integer[]> coursesForIOEC = new HashMap<Integer, Integer[]>();
 		coursesForIOEC.put((Integer) 1, new Integer[] { 109, 110 });
 		coursesForIOEC.put((Integer) 2, new Integer[] { 209, 210 });
+		coursesForIOEC.put((Integer) 3, new Integer[] { 309 });
 
 		// Map of groups and students for institute Of Exact Sciences
 		Map<Integer, List<Student>> groupsForIOEC = new HashMap<Integer, List<Student>>();
@@ -86,10 +96,17 @@ public class Main {
 		group210.add(birukov);
 		group210.add(kozov);
 		group210.add(yudin);
+		List<Student> group309 = new ArrayList<Student>();
+		group309.add(yudina);
+		group309.add(kozova);
+		group309.add(krylova);
+		group309.add(savelyeva);
+
 		groupsForIOEC.put(109, group109);
 		groupsForIOEC.put(110, group110);
 		groupsForIOEC.put(209, group209);
 		groupsForIOEC.put(210, group210);
+		groupsForIOEC.put(309, group309);
 
 		// students of institute Of Humanitarian Sciences
 		Student orlov = createStudent("Орлов",
@@ -163,12 +180,20 @@ public class Main {
 
 		listOfInstitutes.add(instituteOfExactSciences);
 		listOfInstitutes.add(instituteOfHumanitarianSciences);
+		listOfLessons.add(math);
+		listOfLessons.add(programming);
+		listOfLessons.add(physics);
+		listOfLessons.add(chemistry);
+		listOfLessons.add(philosophy);
+		listOfLessons.add(sociology);
+		listOfLessons.add(russianLanguage);
+		listOfLessons.add(russianLiterature);
 
 		// overview
 		System.out.println("Данные на вход:");
 		printDatabase(listOfInstitutes);
 
-		console(listOfInstitutes);
+		console(listOfInstitutes, listOfLessons);
 	}
 
 	public static Student createStudent(String name, Lesson[] lessons, int[] marks) {
@@ -208,7 +233,7 @@ public class Main {
 	/**
 	 * @param listOfInstitutes
 	 */
-	public static void console(List<Institute> listOfInstitutes) {
+	public static void console(List<Institute> listOfInstitutes, List<Lesson> listOfLessons) {
 		// console for user
 		Scanner in = new Scanner(System.in);
 		System.out.println("Выберите запрос который нужно выполнить:\n"
@@ -217,8 +242,7 @@ public class Main {
 				+ "3) курс, на котором исключено большее количество студентов\n"
 				+ "4) институт с наибольшим количеством отличников\n"
 				+ "5) полный список отличников с указанием института, группы и курса, где они учатся\n"
-				+ "6) группу, где нет двоечников\n"
-				+ "7) институт и курс, на котором средний бал не меньше 3,5\n"
+				+ "6) группу, где нет двоечников\n" + "7) институт и курс, на котором средний бал не меньше 3,5\n"
 				+ "8) фамилии студентов, у которых нет троек и двоек\n"
 				+ "9) институт и группу, где наибольшее количество отличников\n"
 				+ "10) фамилии студентов-отличников на третьем курсе\n"
@@ -274,7 +298,7 @@ public class Main {
 
 			printDatabase(listOfInstitutes);
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 2:
@@ -314,13 +338,15 @@ public class Main {
 			System.out.println(resultMap.toString());
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 3:
-			// when i was doing this task i understood that would be better if i did in class Institute
-			// only one hashmap with key number of course which including other hashmap with key number of group
-			// which including student 
+			// when i was doing this task i understood that would be better if i did in
+			// class Institute
+			// only one hashmap with key number of course which including other hashmap with
+			// key number of group
+			// which including student
 			// task 3
 			for (Institute institute : listOfInstitutes) {
 				for (Map.Entry<String, Integer> entry : institute.getNumberOfDeductionsOnCourse().entrySet()) {
@@ -333,7 +359,7 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 4:
@@ -371,7 +397,7 @@ public class Main {
 			System.out.println("Task 4: институт с наибольшим количеством отличников\n");
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 5:
@@ -398,20 +424,20 @@ public class Main {
 					"Task 5: полный список отличников с указанием института, группы и курса, где они учатся\n");
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 6:
 			// task 6
 
 			System.out.println("Task 6: группу, где нет двоечников\n");
-			
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
 						if (entry2.getKey() / 100 == entry.getKey()) {
 							boolean flag = true;
-							for(Student student: entry2.getValue()) {
+							for (Student student : entry2.getValue()) {
 								if (student.numberOfMarksTwo() != 0) {
 									flag = false;
 								}
@@ -426,34 +452,35 @@ public class Main {
 			System.out.println(result);
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 7:
 			// task 7: type average mark
 
 			System.out.println("Task 7: институт и курс, на котором средний бал не меньше 3,5\n");
-			
+
 			Map<String, Float> averageInCourses = new HashMap<String, Float>();
 			float summ = 0;
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
-						for (Student student: entry2.getValue()) {
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						for (Student student : entry2.getValue()) {
 							summ += student.getAverageMark();
 						}
 					}
-					averageInCourses.put(institute.getName() + entry.getKey(), summ / institute.getStudentsInGroup().size());
+					averageInCourses.put(institute.getName() + entry.getKey(),
+							summ / institute.getStudentsInGroup().size());
 				}
 			}
-			for (Map.Entry<String, Float> entry: averageInCourses.entrySet()) {
+			for (Map.Entry<String, Float> entry : averageInCourses.entrySet()) {
 				if (entry.getValue() >= 3.5) {
 					result += entry.getKey() + "\n";
 				}
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 8:
@@ -477,23 +504,23 @@ public class Main {
 					}
 				}
 			}
-			
+
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 9:
 			// task 9: type the most number of
 
 			System.out.println("Task 9: институт и группу, где наибольшее количество отличников\n");
-			
+
 			Map<Integer, Integer> countExcellentStudentsInGroups = new HashMap<Integer, Integer>();
 			int count = 0;
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
-						for (Student student: entry2.getValue()) {
-							if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0 
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						for (Student student : entry2.getValue()) {
+							if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0
 									&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
 								count++;
 							}
@@ -512,42 +539,30 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 10:
 			// task 10
-			
+
 			// TODO: third course
 
 			System.out.println("Task 10: фамилии студентов-отличников на третьем курсе\n");
 
-			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
-			break;
-
-		case 11:
-			// task 11: type lessons
-
-			System.out.println("Task 11: предметы и перечень кафедр, на которых они присутствуют\n");
-
-			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
-			break;
-
-		case 12:
-			// task 12: type average mark
-
-			System.out.println("Task 12: фамилии студентов, группу и институт, где средний балл составляет 4,5\n");
-			
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
-						for (Student student: entry2.getValue()) {
-							if (entry2.getKey() / 100 == entry.getKey()) {
-								if (student.getAverageMark() == 4.5) {
-									result += student.getSurname() + " " + institute.getName() + " "
-											+ entry2.getKey() + " " + entry.getKey() + "\n";
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						List<Student> students = entry2.getValue();
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							if (entry2.getKey() / 100 == 3) {
+								for (Student student : students) {
+									if (entry.getKey() == entry2.getKey() / 100) {
+										if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0
+												&& student.numberOfMarkThree() == 0
+												&& student.numberOfMarkFour() == 0) {
+											result += student.getSurname() + "\n";
+										}
+									}
 								}
 							}
 						}
@@ -556,14 +571,51 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
+			break;
+
+		case 11:
+			// task 11: type lessons
+
+			System.out.println("Task 11: предметы и перечень кафедр, на которых они присутствуют\n");
+
+			for (Lesson lesson : listOfLessons) {
+				result += lesson.getName() + " на кафедре " + lesson.getDepartment() + "\n";
+			}
+
+			writeIntoFile(result);
+			repeatQueries(listOfInstitutes, listOfLessons);
+			break;
+
+		case 12:
+			// task 12: type average mark
+
+			System.out.println("Task 12: фамилии студентов, группу и институт, где средний балл составляет 4,5\n");
+
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						for (Student student : entry2.getValue()) {
+							if (entry2.getKey() / 100 == entry.getKey()) {
+								if (student.getAverageMark() == 4.5) {
+									result += student.getSurname() + " " + institute.getName() + " " + entry2.getKey()
+											+ " " + entry.getKey() + "\n";
+								}
+							}
+						}
+					}
+				}
+			}
+
+			writeIntoFile(result);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 13:
 			// task 13
 
 			System.out.println("Task 13: студентов первого курса, у которых три двойки и удалите их\n");
-			
+
 			for (Institute institute : listOfInstitutes) {
 				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
 					// create 2 lists for late removing elements because we can't remove elements
@@ -596,20 +648,20 @@ public class Main {
 
 			printDatabase(listOfInstitutes);
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 14:
 			// task 14
 
 			System.out.println("Task 14: группы, в которых нет двоечников\n");
-			
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
 						if (entry2.getKey() / 100 == entry.getKey()) {
 							boolean flag = true;
-							for(Student student: entry2.getValue()) {
+							for (Student student : entry2.getValue()) {
 								if (student.numberOfMarksTwo() != 0) {
 									flag = false;
 								}
@@ -624,7 +676,7 @@ public class Main {
 			System.out.println(result);
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 15:
@@ -633,8 +685,85 @@ public class Main {
 			System.out.println(
 					"Task 15: фамилии студентов-отличников на первом и втором курсах по всем институтам, средний балл по каждой группе и упорядочьте группы по нему\n");
 
+			// get average mark from all groups
+			Map<Integer, Float> resultMap4 = new HashMap<Integer, Float>();
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						float summMarkOfGroup = 0;
+						List<Student> students = entry2.getValue();
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							for (Student student : students) {
+								summMarkOfGroup += student.getAverageMark();
+							}
+						}
+						resultMap4.put(entry2.getKey(), summMarkOfGroup / entry2.getValue().size());
+					}
+				}
+			}
+			
+			// sorting groups by average mark
+			List<Integer> sortedGroups = new ArrayList<Integer>();
+			List<Float> averageMark = new ArrayList<Float>();
+			
+			for (Map.Entry<Integer, Float> entry: resultMap4.entrySet()) {
+				sortedGroups.add(entry.getKey());
+				averageMark.add(entry.getValue());
+			}
+			
+			boolean isSorted = false;
+			int tempGroup = 0;
+			float tempMark = 0;
+			while (!isSorted) {
+				isSorted = true;
+				for (int i = 0; i < sortedGroups.size() - 1; i++) {
+					if (averageMark.get(i) > averageMark.get(i + 1)) {
+						isSorted = false;
+						
+						tempGroup = sortedGroups.get(i);
+						sortedGroups.set(i, sortedGroups.get(i + 1));
+						sortedGroups.set(i + 1, tempGroup);
+						
+						tempMark = averageMark.get(i);
+						averageMark.set(i, averageMark.get(i + 1));
+						averageMark.set(i + 1, tempMark);
+					}
+				}
+			}
+			
+			// get excellent students
+			Map<Integer, Student> resultMap5 = new HashMap<Integer, Student>();
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						List<Student> students = entry2.getValue();
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							for (Student student : students) {
+								if (entry2.getKey() / 100 == 1 || entry2.getKey() / 100 == 2) {
+									if (entry.getKey() == entry2.getKey() / 100) {
+										if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0
+												&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
+											resultMap5.put(entry2.getKey(), student);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// outPrint excellent students ordered by average marks of their groups
+			for (int groupNumber: sortedGroups) {
+				for (Map.Entry<Integer, Student> entry: resultMap5.entrySet()) {
+					if (groupNumber == entry.getKey()) {
+						result += entry.getValue().getSurname() + "\n";
+					}
+				}
+			}
+
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 16:
@@ -642,8 +771,24 @@ public class Main {
 
 			System.out.println("Task 16: институты, на которых нет двоечников\n");
 
+			for (Institute institute : listOfInstitutes) {
+				boolean flag = true;
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						for (Student student : entry2.getValue()) {
+							if (student.numberOfMarksTwo() > 0) {
+								flag = false;
+							}
+						}
+					}
+				}
+				if (flag) {
+					result += institute.getName() + "\n";
+				}
+			}
+
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 17:
@@ -652,11 +797,11 @@ public class Main {
 			System.out.println(
 					"Task 17: фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3\n");
 
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
 						if (entry2.getKey() / 100 == entry.getKey()) {
-							for(Student student: entry2.getValue()) {
+							for (Student student : entry2.getValue()) {
 								if (student.numberOfMarksZero() != 0) {
 									result += student.getSurname() + "\n";
 								}
@@ -667,16 +812,15 @@ public class Main {
 			}
 			System.out.println(result);
 
-			
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 18:
 			// task 18
 			Map<Institute, Integer> numberOfGroupsWhichHasNotMarkTwo = new HashMap<Institute, Integer>();
 			for (Institute institute : listOfInstitutes) {
-				int count = 0;
+				count = 0;
 				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
 					if (entry.getKey() == 1) {
 						Integer[] groups = entry.getValue();
@@ -716,22 +860,22 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 19:
 			// task 19: type the most number of
 
 			System.out.println("Task 19: курс с наибольшим количеством отличников\n");
-			
+
 			Map<String, Integer> countExcellentStudentsInCourse = new HashMap<String, Integer>();
 			count = 0;
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
-						for (Student student: entry2.getValue()) {
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
+						for (Student student : entry2.getValue()) {
 							if (entry2.getKey() / 100 == entry.getKey()) {
-								if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0 
+								if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0
 										&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
 									count++;
 								}
@@ -751,7 +895,7 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 20:
@@ -776,7 +920,7 @@ public class Main {
 						}
 					}
 				}
-				resultMap.put(institute, count);
+				resultMap3.put(institute, count);
 			}
 			max = 0;
 			for (Map.Entry<Institute, Integer> entry : resultMap3.entrySet()) {
@@ -785,22 +929,22 @@ public class Main {
 					max = entry.getValue();
 				}
 			}
-			
+
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 21:
 			// task 21
 
 			System.out.println("Task 21: группы, в которых нет отличников\n");
-			
-			for (Institute institute: listOfInstitutes) {
-				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
-					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+
+			for (Institute institute : listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
 						if (entry2.getKey() / 100 == entry.getKey()) {
 							boolean flag = true;
-							for(Student student: entry2.getValue()) {
+							for (Student student : entry2.getValue()) {
 								if (student.numberOfMarkFive() != 0) {
 									flag = false;
 								}
@@ -815,7 +959,7 @@ public class Main {
 			System.out.println(result);
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 22:
@@ -823,7 +967,7 @@ public class Main {
 
 			System.out.println(
 					"Task 22: полный список двоечников с указанием института, группы и курса, где они учатся\n");
-			
+
 			for (Institute institute : listOfInstitutes) {
 				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
 					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
@@ -843,7 +987,7 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 
 		case 23:
@@ -851,7 +995,7 @@ public class Main {
 
 			System.out.println(
 					"Task 23: фамилии студентов-отличников на втором курсе с указанием группы и института, где они учатся\n");
-			
+
 			for (Institute institute : listOfInstitutes) {
 				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
 					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
@@ -861,7 +1005,8 @@ public class Main {
 								for (Student student : students) {
 									if (entry.getKey() == entry2.getKey() / 100) {
 										if (student.numberOfMarksZero() == 0 && student.numberOfMarksTwo() == 0
-												&& student.numberOfMarkThree() == 0 && student.numberOfMarkFour() == 0) {
+												&& student.numberOfMarkThree() == 0
+												&& student.numberOfMarkFour() == 0) {
 											result += student.getSurname() + " " + institute.getName() + " "
 													+ entry2.getKey() + " " + entry.getKey() + "\n";
 										}
@@ -874,16 +1019,16 @@ public class Main {
 			}
 
 			writeIntoFile(result);
-			repeatQueries(listOfInstitutes);
+			repeatQueries(listOfInstitutes, listOfLessons);
 			break;
 		}
 	}
 
-	public static void repeatQueries(List<Institute> listOfInstitutes) {
+	public static void repeatQueries(List<Institute> listOfInstitutes, List<Lesson> listOfLessons) {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Продолжить работу?\n1.Да\n2.Нет");
 		if (in.nextInt() == 1) {
-			console(listOfInstitutes);
+			console(listOfInstitutes, listOfLessons);
 		}
 	}
 }
