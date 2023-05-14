@@ -93,7 +93,7 @@ public class Main {
 
 		// students of institute Of Humanitarian Sciences
 		Student orlov = createStudent("Орлов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 0, 2, 2, 5 });
 		Student ulianov = createStudent("Ульянов",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student kulakov = createStudent("Кулаков",
@@ -205,6 +205,9 @@ public class Main {
 		}
 	}
 
+	/**
+	 * @param listOfInstitutes
+	 */
 	public static void console(List<Institute> listOfInstitutes) {
 		// console for user
 		Scanner in = new Scanner(System.in);
@@ -214,7 +217,8 @@ public class Main {
 				+ "3) курс, на котором исключено большее количество студентов\n"
 				+ "4) институт с наибольшим количеством отличников\n"
 				+ "5) полный список отличников с указанием института, группы и курса, где они учатся\n"
-				+ "6) группу, где нет двоечников\n" + "7) институт и курс, на котором средний бал не меньше 3,5\n"
+				+ "6) группу, где нет двоечников\n"
+				+ "7) институт и курс, на котором средний бал не меньше 3,5\n"
 				+ "8) фамилии студентов, у которых нет троек и двоек\n"
 				+ "9) институт и группу, где наибольшее количество отличников\n"
 				+ "10) фамилии студентов-отличников на третьем курсе\n"
@@ -401,6 +405,25 @@ public class Main {
 			// task 6
 
 			System.out.println("Task 6: группу, где нет двоечников\n");
+			
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							boolean flag = true;
+							for(Student student: entry2.getValue()) {
+								if (student.numberOfMarksTwo() != 0) {
+									flag = false;
+								}
+							}
+							if (flag) {
+								result += entry2.getKey() + "\n";
+							}
+						}
+					}
+				}
+			}
+			System.out.println(result);
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
@@ -473,6 +496,25 @@ public class Main {
 			// task 14
 
 			System.out.println("Task 14: группы, в которых нет двоечников\n");
+			
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							boolean flag = true;
+							for(Student student: entry2.getValue()) {
+								if (student.numberOfMarksTwo() != 0) {
+									flag = false;
+								}
+							}
+							if (flag) {
+								result += entry2.getKey() + "\n";
+							}
+						}
+					}
+				}
+			}
+			System.out.println(result);
 
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
@@ -503,6 +545,22 @@ public class Main {
 			System.out.println(
 					"Task 17: фамилии студентов, которые не явились хотя бы на один экзамен (оценка 0) и удалите тех, у которых средний балл ниже 3\n");
 
+			for (Institute institute: listOfInstitutes) {
+				for (Map.Entry<Integer, Integer[]> entry: institute.getGroupsOnCourse().entrySet()) {
+					for (Map.Entry<Integer, List<Student>> entry2: institute.getStudentsInGroup().entrySet()) {
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							for(Student student: entry2.getValue()) {
+								if (student.numberOfMarksZero() != 0) {
+									result += student.getSurname() + "\n";
+								}
+							}
+						}
+					}
+				}
+			}
+			System.out.println(result);
+
+			
 			writeIntoFile(result);
 			repeatQueries(listOfInstitutes);
 			break;
