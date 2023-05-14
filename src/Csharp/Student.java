@@ -65,6 +65,16 @@ public class Student {
 		return count;
 	}
 	
+	public int numberOfMarkFive() {
+		int count = 0;
+		for (Map.Entry<Lesson, Integer> mark: marks.entrySet()) {
+			if (mark.getValue() == 5) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
