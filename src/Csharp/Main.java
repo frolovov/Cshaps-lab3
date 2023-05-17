@@ -34,7 +34,7 @@ public class Main {
 		Student ivanov = createStudent("Иванов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 3 });
 		Student lebedev = createStudent("Лебедев", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 5, 3, 5 });
 		Student antonov = createStudent("Антонов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 2, 2 });
 		Student borisov = createStudent("Борисов", new Lesson[] { math, programming, physics, chemistry },
@@ -42,7 +42,7 @@ public class Main {
 		Student panteleev = createStudent("Пантелеев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 4 });
 		Student zaicev = createStudent("Зайцев", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 5, 5, 2 });
 		Student markov = createStudent("Марков", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student birukov = createStudent("Бирюков", new Lesson[] { math, programming, physics, chemistry },
@@ -52,7 +52,7 @@ public class Main {
 		Student fedorov = createStudent("Федоров", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student kozov = createStudent("Козов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 2, 2, 5 });
+				new int[] { 5, 5, 5, 5 });
 		Student krylov = createStudent("Крылов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 2, 2, 5 });
 		Student savelyev = createStudent("Савельев", new Lesson[] { math, programming, physics, chemistry },
@@ -134,11 +134,11 @@ public class Main {
 		Student melnikov = createStudent("Мельников",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student gromov = createStudent("Громов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
 		Student grachev = createStudent("Грачев",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
 		Student mironov = createStudent("Миронов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
 		Student smirnov = createStudent("Смирнов",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
 
@@ -952,7 +952,7 @@ public class Main {
 						if (entry2.getKey() / 100 == entry.getKey()) {
 							boolean flag = true;
 							for (Student student : entry2.getValue()) {
-								if (student.numberOfMarkFive() != 0) {
+								if (student.getAverageMark() == 5) {
 									flag = false;
 								}
 							}
