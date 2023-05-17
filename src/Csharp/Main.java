@@ -36,11 +36,11 @@ public class Main {
 		Student lebedev = createStudent("Лебедев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student antonov = createStudent("Антонов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 2, 2, 2, 2 });
+				new int[] { 5, 5, 2, 2 });
 		Student borisov = createStudent("Борисов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 2, 2, 2, 2 });
 		Student panteleev = createStudent("Пантелеев", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 5, 5, 4 });
 		Student zaicev = createStudent("Зайцев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student markov = createStudent("Марков", new Lesson[] { math, programming, physics, chemistry },
@@ -110,7 +110,7 @@ public class Main {
 
 		// students of institute Of Humanitarian Sciences
 		Student orlov = createStudent("Орлов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 0, 2, 2, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student ulianov = createStudent("Ульянов",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student kulakov = createStudent("Кулаков",
@@ -134,13 +134,13 @@ public class Main {
 		Student melnikov = createStudent("Мельников",
 				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student gromov = createStudent("Громов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student grachev = createStudent("Грачев",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student mironov = createStudent("Миронов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 5, 5, 5 });
 		Student smirnov = createStudent("Смирнов",
-				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 5, 2, 2, 5 });
+				new Lesson[] { philosophy, sociology, russianLanguage, russianLiterature }, new int[] { 2, 5, 5, 5 });
 
 		// Map of courses and groups for institute Of Humanitarian Sciences
 		Map<Integer, Integer[]> coursesForIOHC = new HashMap<Integer, Integer[]>();
