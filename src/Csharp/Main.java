@@ -28,17 +28,17 @@ public class Main {
 
 		// students of institute Of Exact Sciences
 		Student frolov = createStudent("Фролов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 2, 2, 2, 2 });
 		Student petrov = createStudent("Петров", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 2, 5, 2 });
+				new int[] { 2, 2, 2, 2 });
 		Student ivanov = createStudent("Иванов", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student lebedev = createStudent("Лебедев", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 2, 5, 2 });
+				new int[] { 5, 5, 5, 5 });
 		Student antonov = createStudent("Антонов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 2, 2, 2, 2 });
 		Student borisov = createStudent("Борисов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 2, 2, 2, 2 });
 		Student panteleev = createStudent("Пантелеев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student zaicev = createStudent("Зайцев", new Lesson[] { math, programming, physics, chemistry },
@@ -64,7 +64,7 @@ public class Main {
 		Student krylova = createStudent("Крылова", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 2, 2, 5 });
 		Student savelyeva = createStudent("Савельева", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 2, 2, 5 });
 		Student yudina = createStudent("Юдина", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 2, 2, 5 });
 
@@ -462,15 +462,22 @@ public class Main {
 
 			Map<String, Float> averageInCourses = new HashMap<String, Float>();
 			float summ = 0;
+			int countStudents = 0;
 			for (Institute institute : listOfInstitutes) {
 				for (Map.Entry<Integer, Integer[]> entry : institute.getGroupsOnCourse().entrySet()) {
+					countStudents = 0;
+					summ = 0;
 					for (Map.Entry<Integer, List<Student>> entry2 : institute.getStudentsInGroup().entrySet()) {
-						for (Student student : entry2.getValue()) {
-							summ += student.getAverageMark();
+						if (entry2.getKey() / 100 == entry.getKey()) {
+							for (Student student : entry2.getValue()) {
+								summ += student.getAverageMark();
+								countStudents++;
+							}
 						}
 					}
 					averageInCourses.put(institute.getName() + entry.getKey(),
-							summ / institute.getStudentsInGroup().size());
+							summ /  countStudents);
+					System.out.println(summ / countStudents);
 				}
 			}
 			for (Map.Entry<String, Float> entry : averageInCourses.entrySet()) {
