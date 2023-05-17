@@ -32,7 +32,7 @@ public class Main {
 		Student petrov = createStudent("Петров", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 2, 2, 2, 2 });
 		Student ivanov = createStudent("Иванов", new Lesson[] { math, programming, physics, chemistry },
-				new int[] { 5, 5, 5, 5 });
+				new int[] { 5, 5, 5, 3 });
 		Student lebedev = createStudent("Лебедев", new Lesson[] { math, programming, physics, chemistry },
 				new int[] { 5, 5, 5, 5 });
 		Student antonov = createStudent("Антонов", new Lesson[] { math, programming, physics, chemistry },
